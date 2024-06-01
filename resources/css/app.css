@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .container {
+        @apply max-w-[1170px] px-5 lg:px-0 mx-auto;
+    }
+    .input {
+        @apply py-[18px] px-[30px] text-base text-opacity-75 placeholder:font-medium placeholder:text-opacity-75 border border-dark border-opacity-25 w-full rounded;
+    }
+    .form {
+        @apply flex flex-col items-start gap-[30px];
+    }
+    .button {
+        @apply rounded-full transition duration-300 border border-dark border-opacity-25
+        bg-accentBlue text-white hover:bg-transparent hover:text-dark hover:border-dark hover:border-opacity-25;
+    }
+}
