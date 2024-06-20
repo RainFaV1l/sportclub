@@ -31,7 +31,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $section = Section::query()->find($id);
+        $section = Section::query()->findOrFail($id);
 
         $schedules = SectionSchedule::query()->where('section_id', $section->id)->get();
 

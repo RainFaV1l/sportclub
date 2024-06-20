@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
 use MoonShine\Fields\DateRange;
+use MoonShine\Fields\Enum;
 use MoonShine\Fields\Text;
 use MoonShine\Handlers\ExportHandler;
 use MoonShine\Handlers\ImportHandler;
@@ -25,11 +26,14 @@ class UserResource extends ModelResource
 
     protected string $title = 'Пользователи';
 
+    protected string $column = 'full_name';
+
     public function fields(): array
     {
         return [
             ID::make()->sortable()->showOnExport(),
             Text::make('ФИО', 'full_name')->sortable()->showOnExport()->useOnImport(),
+            Text::make('Роль', 'role')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Email', 'email')->sortable()->showOnExport()->useOnImport(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
@@ -45,6 +49,7 @@ class UserResource extends ModelResource
         return [
             ID::make()->sortable()->showOnExport(),
             Text::make('ФИО', 'full_name')->sortable()->showOnExport()->useOnImport(),
+            Text::make('Роль', 'role')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Email', 'email')->sortable()->showOnExport()->useOnImport(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
@@ -60,6 +65,10 @@ class UserResource extends ModelResource
         return [
             ID::make()->sortable()->showOnExport(),
             Text::make('ФИО', 'full_name')->sortable()->showOnExport()->useOnImport(),
+            Enum::make('Роль', 'role')->sortable()->showOnExport()->useOnImport()->options([
+                'Тренер' => 'Тренер',
+                'Пользователь' => 'Пользователь',
+            ]),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Email', 'email')->sortable()->showOnExport()->useOnImport(),
         ];
@@ -73,6 +82,7 @@ class UserResource extends ModelResource
         return [
             ID::make()->sortable()->showOnExport(),
             Text::make('ФИО', 'full_name')->sortable()->showOnExport()->useOnImport(),
+            Text::make('Роль', 'role')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Email', 'email')->sortable()->showOnExport()->useOnImport(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
@@ -92,7 +102,7 @@ class UserResource extends ModelResource
             'full_name' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'password' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
         ];
     }
 

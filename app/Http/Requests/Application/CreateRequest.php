@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Application;
 
+use App\Models\Section;
+use App\Rules\BirthdateInRange;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
@@ -11,7 +13,7 @@ class CreateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -21,12 +23,22 @@ class CreateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $section = Section::query()->find(request()->section_id);
+
+        if (is_null($this->request->get('birthday'))) {
+            $this->request->set('birthday', auth()->user()->birthday);
+        } else {
+            $this->request->set('is_child', true);
+        }
+
         return [
             'phone' => 'required|string|max:255',
             'full_name' => 'required|string|max:500',
             'email' => 'required|email|max:255',
+            'birthday' => ['required', 'date', new BirthdateInRange($section->age_limit_min, $section->age_limit_max)],
             'section_id' => 'required|integer|exists:sections,id',
             'schedule_id' => 'required|integer|exists:schedules,id',
+            'is_child' => 'nullable|bool',
         ];
     }
 

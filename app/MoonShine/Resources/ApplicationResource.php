@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Application;
 
 use MoonShine\Fields\DateRange;
+use MoonShine\Fields\Enum;
 use MoonShine\Fields\Relationships\BelongsTo;
+use MoonShine\Fields\Select;
+use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Handlers\ExportHandler;
 use MoonShine\Handlers\ImportHandler;
@@ -34,6 +37,8 @@ class ApplicationResource extends ModelResource
             Text::make('ФИО', 'full_name')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Email', 'email')->sortable()->showOnExport()->useOnImport(),
+            Enum::make('Статус', 'status')->sortable()->showOnExport()->useOnImport(),
+            Switcher::make('Запись ребенка?', 'is_child')->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Секция', 'section', resource: new SectionResource())->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Расписание', 'schedule', resource: new ScheduleResource())->searchable()->showOnExport()->useOnImport()->sortable(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
@@ -50,7 +55,8 @@ class ApplicationResource extends ModelResource
             ID::make()->sortable()->showOnExport(),
             Text::make('ФИО', 'full_name')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
-            Text::make('Email', 'email')->sortable()->showOnExport()->useOnImport(),
+            Text::make('Статус', 'status')->sortable()->showOnExport()->useOnImport(),
+            Switcher::make('Запись ребенка?', 'is_child')->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Секция', 'section', resource: new SectionResource())->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Расписание', 'schedule', resource: new ScheduleResource())->searchable()->showOnExport()->useOnImport()->sortable(),
         ];
@@ -66,7 +72,13 @@ class ApplicationResource extends ModelResource
             Text::make('ФИО', 'full_name')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Email', 'email')->sortable()->showOnExport()->useOnImport(),
-            BelongsTo::make('Секция', 'section', resource: new SectionResource())->sortable()->showOnExport()->useOnImport(),
+            Switcher::make('Запись ребенка?', 'is_child')->sortable()->showOnExport()->useOnImport(),
+            Enum::make('Статус', 'status')->sortable()->showOnExport()->useOnImport()->options([
+                'В модерации' => 'В модерации',
+                'Принят' => 'Принят',
+                'Отклонен' => 'Отклонен'
+            ]),
+            BelongsTo::make('Секция', 'section', resource: new SectionResource())->searchable()->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Расписание', 'schedule', resource: new ScheduleResource())->searchable()->showOnExport()->useOnImport()->sortable(),
         ];
     }
@@ -81,6 +93,8 @@ class ApplicationResource extends ModelResource
             Text::make('ФИО', 'full_name')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Email', 'email')->sortable()->showOnExport()->useOnImport(),
+            Text::make('Статус', 'status')->sortable()->showOnExport()->useOnImport(),
+            Switcher::make('Запись ребенка?', 'is_child')->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Секция', 'section', resource: new SectionResource())->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Расписание', 'schedule', resource: new ScheduleResource())->searchable()->showOnExport()->useOnImport()->sortable(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
@@ -100,9 +114,9 @@ class ApplicationResource extends ModelResource
             'full_name' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'password' => 'required|string|max:255',
             'section_id' => 'nullable|integer|exists:sections,id',
             'schedule_id' => 'nullable|integer|exists:schedules,id',
+            'status' => 'required|string',
         ];
     }
 
@@ -137,6 +151,7 @@ class ApplicationResource extends ModelResource
         return [
             BelongsTo::make('Секция', 'section', resource: new SectionResource())->searchable()->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Расписание', 'schedule', resource: new ScheduleResource())->searchable()->showOnExport()->useOnImport()->sortable(),
+            Switcher::make('Запись ребенка?', 'is_child')->sortable()->showOnExport()->useOnImport(),
             DateRange::make('Дата обновления', 'updated_at'),
             DateRange::make('Дата создания', 'created_at'),
         ];

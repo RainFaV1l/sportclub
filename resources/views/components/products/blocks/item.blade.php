@@ -3,17 +3,17 @@
 ])
 
 <div class="border-b border-dark border-opacity-25">
-    <div class="container py-[30px] grid grid-cols-3">
-        <div class="h-full col-span-1">
+    <div class="container py-[30px] grid grid-cols-5">
+        <div class="h-full col-span-2">
             <img class="h-full w-full object-cover rounded-l" src="{{ asset($product->image()) }}" alt="Изображение">
         </div>
-        <div class="h-full col-span-2 bg-accentGray flex flex-col gap-[25px] p-[30px] rounded-r">
+        <div class="h-full col-span-3 bg-accentGray flex flex-col gap-[25px] p-[30px] rounded-r">
             <div class="flex flex-col gap-[15px]">
                 @php
                     $items = [
                         [
                             'title' => 'Стоимость',
-                            'value' => (int) $product->price !== 0 ? $product->price . ' ₽' : 'бесплатно',
+                            'value' => (int) $product->price !== 0 ? $product->price . ' ₽ за одно занятие' : 'бесплатно',
                         ],
                         [
                             'title' => 'Телефон',
@@ -26,6 +26,22 @@
                         [
                             'title' => 'Адрес',
                             'value' => $product->address,
+                        ],
+                        [
+                            'title' => 'Тренер',
+                            'value' => $product->trainer ? $product->trainerInfo->full_name : 'Нет',
+                        ],
+                        [
+                            'title' => 'Период',
+                            'value' => $product->period . ' месяцев',
+                        ],
+                        [
+                            'title' => 'Возрастные рамки от',
+                            'value' => !is_null($product->age_limit_min) ? $product->age_limit_min . ' лет' : 'нет',
+                        ],
+                        [
+                            'title' => 'Возрастные рамки до',
+                            'value' => !is_null($product->age_limit_max) ? $product->age_limit_max . ' лет' : 'нет',
                         ],
                     ];
                 @endphp

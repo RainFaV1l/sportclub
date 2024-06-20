@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\UpdatePasswordRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Models\Application;
+use App\Models\Section;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -16,9 +17,22 @@ class UserController extends Controller
 
     public function applications()
     {
-        $applications = Application::query()->where('user_id', auth()->user()->getAuthIdentifier())->get();
+        if(auth()->user()->role === 'Тренер') {
 
-        return view('pages.applications', compact('applications'));
+            $query = Section::query()->where('trainer', auth()->user()->getAuthIdentifier());
+            $sections = $query->orderByDesc('created_at')->get();
+            $sectionIds = $query->select('id')->get();
+            $applications = Application::query()->whereIn('section_id', $sectionIds)->orderByDesc('created_at')->get();
+
+            return view('pages.applications', compact('applications', 'sections'));
+
+        } else {
+
+            $applications = Application::query()->where('user_id', auth()->user()->getAuthIdentifier())->get();
+
+            return view('pages.applications', compact('applications'));
+
+        }
     }
 
     public function update(UpdateRequest $request)

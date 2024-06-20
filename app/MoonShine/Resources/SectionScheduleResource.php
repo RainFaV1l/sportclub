@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\SectionSchedule;
 
 use MoonShine\Fields\DateRange;
+use MoonShine\Fields\Number;
 use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Text;
 use MoonShine\Handlers\ExportHandler;
@@ -33,6 +34,7 @@ class SectionScheduleResource extends ModelResource
             ID::make()->sortable()->showOnExport(),
             BelongsTo::make('Секция', 'section', resource: new SectionResource())->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Расписание', 'schedule', resource: new ScheduleResource())->searchable()->showOnExport()->useOnImport()->sortable(),
+            Number::make('Количество человек', 'number_of_people')->showOnExport()->useOnImport()->sortable(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
             Text::make('Дата создания', 'created_at')->sortable()->showOnExport()
         ];
@@ -47,6 +49,7 @@ class SectionScheduleResource extends ModelResource
             ID::make()->sortable()->showOnExport(),
             BelongsTo::make('Секция', 'section', resource: new SectionResource())->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Расписание', 'schedule', resource: new ScheduleResource())->searchable()->showOnExport()->useOnImport()->sortable(),
+            Number::make('Количество человек', 'number_of_people')->showOnExport()->useOnImport()->sortable(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
             Text::make('Дата создания', 'created_at')->sortable()->showOnExport()
         ];
@@ -61,6 +64,7 @@ class SectionScheduleResource extends ModelResource
             ID::make()->sortable()->showOnExport(),
             BelongsTo::make('Секция', 'section', resource: new SectionResource())->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Расписание', 'schedule', resource: new ScheduleResource())->searchable()->showOnExport()->useOnImport()->sortable(),
+            Number::make('Количество человек', 'number_of_people')->showOnExport()->useOnImport()->sortable(),
         ];
     }
 
@@ -73,6 +77,7 @@ class SectionScheduleResource extends ModelResource
             ID::make()->sortable()->showOnExport(),
             BelongsTo::make('Секция', 'section', resource: new SectionResource())->sortable()->showOnExport()->useOnImport(),
             BelongsTo::make('Расписание', 'schedule', resource: new ScheduleResource())->searchable()->showOnExport()->useOnImport()->sortable(),
+            Number::make('Количество человек', 'number_of_people')->showOnExport()->useOnImport()->sortable(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
             Text::make('Дата создания', 'created_at')->sortable()->showOnExport()
         ];
@@ -89,6 +94,7 @@ class SectionScheduleResource extends ModelResource
         return [
             'section_id' => 'nullable|integer|exists:sections,id',
             'schedule_id' => 'nullable|integer|exists:schedules,id',
+            'number_of_people' => 'nullable|integer|min:1|max:100',
         ];
     }
 

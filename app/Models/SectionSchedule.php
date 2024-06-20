@@ -12,6 +12,7 @@ class SectionSchedule extends Model
     protected $fillable = [
         'section_id',
         'schedule_id',
+        'number_of_people',
     ];
 
     public function section(): \Illuminate\Database\Eloquent\Relations\BelongsTo

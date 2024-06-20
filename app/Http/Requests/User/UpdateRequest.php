@@ -25,6 +25,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'full_name' => 'required|string|max:510',
+            'birthday' => 'required|date',
             'phone' => 'required|string|max:255|' . Rule::unique('users', 'phone')->ignore($this->user()->id),
             'email' => 'required|email|max:255|' . Rule::unique('users', 'email')->ignore($this->user()->id),
         ];

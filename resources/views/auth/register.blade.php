@@ -11,9 +11,14 @@
                         <x-input type="text" name="full_name" placeholder="ФИО" class="input" autofocus/>
                         <x-error field="full_name" class="text-red-500"/>
                     </div>
-                    <div class="flex flex-col gap-4 w-full">
-                        <x-input type="text" name="phone" placeholder="Телефон" class="input" autofocus/>
+                    <div class="flex flex-col gap-4 w-full" x-data>
+                        <x-input type="text" name="phone" placeholder="Телефон" class="input" autofocus x-mask="+7 (999) 999-99-99"/>
                         <x-error field="phone" class="text-red-500"/>
+                    </div>
+                    <div class="flex flex-col gap-4 w-full">
+{{--                        <x-flat-pickr id="birthday" name="birthday" class="input" placeholder="Дата рождения"/>--}}
+                        <x-input type="date" name="birthday" placeholder="Дата рождения" class="input" autofocus/>
+                        <x-error field="birthday" class="text-red-500"/>
                     </div>
                     <div class="flex flex-col gap-4 w-full">
                         <x-email class="input" placeholder="Email" autofocus/>

@@ -19,6 +19,10 @@
                         <x-error field="full_name" class="text-red-500"/>
                     </div>
                     <div class="flex flex-col gap-4 w-full">
+                        <x-input type="date" name="birthday" placeholder="Дата рождения" class="input" value="{{ auth()->user()->birthday }}" autofocus/>
+                        <x-error field="birthday" class="text-red-500"/>
+                    </div>
+                    <div class="flex flex-col gap-4 w-full">
                         <x-input type="text" name="phone" placeholder="Телефон" class="input" value="{{ auth()->user()->phone }}" autofocus/>
                         <x-error field="phone" class="text-red-500"/>
                     </div>

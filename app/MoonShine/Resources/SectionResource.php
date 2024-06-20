@@ -40,10 +40,13 @@ class SectionResource extends ModelResource
             Text::make('Название', 'name')->sortable()->showOnExport()->useOnImport(),
             TinyMce::make('Описание', 'description')->sortable()->showOnExport()->useOnImport(),
             Number::make('Цена', 'price')->sortable()->showOnExport()->useOnImport(),
+            Number::make('Минимальный возраст', 'age_limit_min')->sortable()->showOnExport()->useOnImport(),
+            Number::make('Максимальный возраст', '	age_limit_max')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Город', 'city')->sortable()->showOnExport()->useOnImport(),
             Text::make('Адрес', 'address')->sortable()->showOnExport()->useOnImport(),
             Image::make('Изображение', 'photo')->disk('public')->dir('/sections')->showOnExport()->useOnImport(),
+            BelongsTo::make('Тренер', 'trainerInfo', resource: new UserResource())->showOnExport()->useOnImport()->sortable(),
             BelongsTo::make('Категория', 'category', resource: new CategoryResource())->showOnExport()->useOnImport()->sortable(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
             Text::make('Дата создания', 'created_at')->sortable()->showOnExport()
@@ -58,12 +61,11 @@ class SectionResource extends ModelResource
         return [
             ID::make()->sortable()->showOnExport(),
             Text::make('Название', 'name')->sortable()->showOnExport()->useOnImport(),
-            Number::make('Цена', 'price')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Город', 'city')->sortable()->showOnExport()->useOnImport(),
             Text::make('Адрес', 'address')->sortable()->showOnExport()->useOnImport(),
             Image::make('Изображение', 'photo')->disk('public')->dir('/sections')->showOnExport()->useOnImport(),
-            BelongsTo::make('Категория', 'category', resource: new CategoryResource())->showOnExport()->useOnImport()->sortable(),
+            BelongsTo::make('Тренер', 'trainerInfo', resource: new UserResource())->showOnExport()->useOnImport()->sortable(),
         ];
     }
 
@@ -76,12 +78,16 @@ class SectionResource extends ModelResource
             ID::make()->sortable()->showOnExport(),
             Text::make('Название', 'name')->sortable()->showOnExport()->useOnImport(),
             TinyMce::make('Описание', 'description')->sortable()->showOnExport()->useOnImport(),
+            Number::make('Минимальный возраст', 'age_limit_min')->sortable()->showOnExport()->useOnImport(),
+            Number::make('Максимальный возраст', '	age_limit_max')->sortable()->showOnExport()->useOnImport(),
+            Number::make('Период в месяцах', 'period')->sortable()->showOnExport()->useOnImport(),
             Number::make('Цена', 'price')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Город', 'city')->sortable()->showOnExport()->useOnImport(),
             Text::make('Адрес', 'address')->sortable()->showOnExport()->useOnImport(),
             Image::make('Изображение', 'photo')->disk('public')->dir('/sections')->showOnExport()->useOnImport(),
-            BelongsTo::make('Категория', 'category', resource: new CategoryResource())->showOnExport()->useOnImport()->sortable(),
+            BelongsTo::make('Категория', 'category', resource: new CategoryResource())->searchable()->showOnExport()->useOnImport()->sortable(),
+            BelongsTo::make('Тренер', 'trainerInfo', resource: new UserResource())->searchable()->showOnExport()->useOnImport()->sortable()
         ];
     }
 
@@ -94,12 +100,16 @@ class SectionResource extends ModelResource
             ID::make()->sortable()->showOnExport(),
             Text::make('Название', 'name')->sortable()->showOnExport()->useOnImport(),
             TinyMce::make('Описание', 'description')->sortable()->showOnExport()->useOnImport(),
+            Number::make('Минимальный возраст', 'age_limit_min')->sortable()->showOnExport()->useOnImport(),
+            Number::make('Максимальный возраст', '	age_limit_max')->sortable()->showOnExport()->useOnImport(),
+            Number::make('Период в месяцах', 'period')->sortable()->showOnExport()->useOnImport(),
             Number::make('Цена', 'price')->sortable()->showOnExport()->useOnImport(),
             Text::make('Телефон', 'phone')->sortable()->showOnExport()->useOnImport(),
             Text::make('Город', 'city')->sortable()->showOnExport()->useOnImport(),
             Text::make('Адрес', 'address')->sortable()->showOnExport()->useOnImport(),
             Image::make('Изображение', 'photo')->disk('public')->dir('/sections')->showOnExport()->useOnImport(),
-            BelongsTo::make('Категория', 'category', resource: new CategoryResource())->showOnExport()->useOnImport()->sortable(),
+            BelongsTo::make('Категория', 'category', resource: new CategoryResource())->searchable()->showOnExport()->useOnImport()->sortable(),
+            BelongsTo::make('Тренер', 'trainerInfo', resource: new UserResource())->searchable()->showOnExport()->useOnImport()->sortable(),
             Text::make('Дата обновления', 'updated_at')->sortable()->showOnExport(),
             Text::make('Дата создания', 'created_at')->sortable()->showOnExport()
         ];
@@ -116,6 +126,8 @@ class SectionResource extends ModelResource
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:5000',
+            'age_limit_min' => 'required|integer|min:0',
+            'age_limit_max' => 'required|integer|max:80',
             'price' => 'required|numeric|max:1000000',
             'phone' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -123,6 +135,7 @@ class SectionResource extends ModelResource
             'photo' => 'nullable|image|max:8192',
             'section_category_id' => 'nullable|integer|exists:section_categories,id',
             'schedule_id' => 'nullable|integer|exists:schedules,id',
+            'period' => 'nullable|integer|min:1|max:12',
         ];
     }
 
@@ -156,6 +169,7 @@ class SectionResource extends ModelResource
     {
         return [
             BelongsTo::make('Категория', 'category', resource: new CategoryResource())->searchable()->showOnExport()->useOnImport(),
+            BelongsTo::make('Тренер', 'trainerInfo', resource: new UserResource())->showOnExport()->useOnImport()->sortable(),
             Range::make('Цена', 'price'),
             DateRange::make('Дата обновления', 'updated_at'),
             DateRange::make('Дата создания', 'created_at'),

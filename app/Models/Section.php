@@ -20,6 +20,9 @@ class Section extends Model
         'address',
         'photo',
         'section_category_id',
+        'period',
+        'age_limit_min',
+        'age_limit_max',
     ];
 
     public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -30,5 +33,15 @@ class Section extends Model
     public function image()
     {
         return asset(Storage::url($this->photo));
+    }
+
+    public function trainerInfo()
+    {
+        return $this->belongsTo(User::class, 'trainer');
+    }
+
+    public function sectionSchedules()
+    {
+        return $this->hasMany(SectionSchedule::class, 'section_id');
     }
 }

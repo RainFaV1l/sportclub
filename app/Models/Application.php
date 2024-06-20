@@ -13,10 +13,13 @@ class Application extends Model
         'phone',
         'full_name',
         'email',
+        'birthday',
         'schedule',
         'section_id',
         'schedule_id',
         'user_id',
+        'status',
+        'is_child',
     ];
 
     public function section(): \Illuminate\Database\Eloquent\Relations\BelongsTo
